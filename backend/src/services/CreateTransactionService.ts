@@ -24,8 +24,12 @@ class CreateTransactionService {
 
     const { total } = await transactionRepository.getBalance();
 
-    if (type === 'outcome' && value > total)
-      throw new AppError('Valor invaludi', 400);
+    if (!title || !type || !value || !category) {
+      throw new AppError('invalid value', 400);
+    }
+
+    if ((type === 'outcome' && value > total) || value <= 0)
+      throw new AppError(' invalid value', 400);
 
     let transactionCategory = await categoryRepository.findOne({
       where: {

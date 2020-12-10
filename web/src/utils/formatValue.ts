@@ -3,6 +3,7 @@ const formatValue = (value: number): string => {
     style: 'currency',
     currency: 'BRL',
   }).format(value);
+
   return convert;
 };
 

@@ -24,9 +24,9 @@ interface Transaction {
 }
 
 interface Balance {
-  income: number;
-  outcome: number;
-  total: number;
+  income: string;
+  outcome: string;
+  total: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -34,31 +34,51 @@ const Dashboard: React.FC = () => {
   const [balance, setBalance] = useState<Balance>({} as Balance);
 
   useEffect(() => {
-    api.get('/transactions').then(response => {
-      const transactionsFormatted = response.data.transactions.map(
-        (transaction: Transaction) => ({
-          ...transaction,
-          formattedValue: formatValue(transaction.value),
-          formattedDate: new Date(transaction.created_at).toLocaleDateString(
-            'pt-br',
-          ),
-        }),
-      );
+    api
+      .get('/transactions')
+      .then(response => {
+        const transactionsFormatted = response.data.transactions.map(
+          (transaction: Transaction) => ({
+            ...transaction,
+            formattedValue: formatValue(transaction.value),
+            formattedDate: new Date(transaction.created_at).toLocaleDateString(
+              'pt-br',
+            ),
+          }),
+        );
+        const initialValueBalance = {
+          income: formatValue(0),
+          outcome: formatValue(0),
+          total: formatValue(0),
+        };
 
-      const balanceFormatted = {
-        ...response.data.balance,
-        income: formatValue(response.data.balance.income),
-        outcome: formatValue(response.data.balance.outcome),
-        total: formatValue(response.data.balance.total),
-      };
+        const balanceFormatted = {
+          ...response.data.balance,
+          income:
+            formatValue(response.data.balance.income) ||
+            initialValueBalance.income,
+          outcome:
+            formatValue(response.data.balance.outcome) ||
+            initialValueBalance.outcome,
+          total:
+            formatValue(response.data.balance.total) ||
+            initialValueBalance.total,
+        };
 
-      setBalance(balanceFormatted);
-      setTransactions(transactionsFormatted);
-    });
+        setBalance(balanceFormatted);
+        setTransactions(transactionsFormatted);
+      })
+      .catch(() => {
+        setBalance({
+          income: formatValue(0),
+          outcome: formatValue(0),
+          total: formatValue(0),
+        });
+      });
   }, []);
   return (
     <>
-      <Header />
+      <Header isVisible />
       <Container>
         <CardContainer>
           <Card>

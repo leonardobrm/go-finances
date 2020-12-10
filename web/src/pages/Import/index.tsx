@@ -35,12 +35,12 @@ const Import: React.FC = () => {
   }
 
   function submitFile(files: File[]): void {
-    console.log('files', files);
+    // TODO
   }
 
   return (
     <>
-      <Header size="small" />
+      <Header size="small" isVisible />
       <Container>
         <Title>Importar uma transação</Title>
         <ImportFileContainer>

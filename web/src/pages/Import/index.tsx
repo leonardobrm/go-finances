@@ -1,11 +1,14 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Modal } from 'antd';
 
 import filesize from 'filesize';
 
 import Header from '../../components/Header';
 import FileList from '../../components/FileList';
 import Upload from '../../components/Upload';
+import 'antd/dist/antd.css';
 
 import { Container, Title, ImportFileContainer, Footer } from './styles';
 
@@ -22,20 +25,40 @@ const Import: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<FileProps[]>([]);
   const history = useHistory();
 
-  async function handleUpload(): Promise<void> {
-    // const data = new FormData();
+  async function handleUpload(): Promise<void | Error> {
+    const data = new FormData();
 
-    // TODO
+    if (!uploadedFiles.length) {
+      Modal.warning({
+        title: 'Arquivo csv não selecionado',
+      });
+
+      return;
+    }
+
+    const { file, name } = uploadedFiles[0];
+
+    data.append('file', file, name);
 
     try {
-      // await api.post('/transactions/import', data);
+      await api.post('/transactions/import', data);
+
+      history.push('/');
     } catch (err) {
-      // console.log(err.response.error);
+      console.error(err);
+      Modal.error({
+        title: 'Falha ao enviar',
+      });
     }
   }
 
   function submitFile(files: File[]): void {
-    // TODO
+    const uploadFiles = files.map(file => ({
+      file,
+      name: file.name,
+      readableSize: filesize(file.size),
+    }));
+    setUploadedFiles(uploadFiles);
   }
 
   return (

@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="Go Finances" src="./src/assets/go-finances.gif" width="400px" style="border-radius:16px;"/>
+  <img alt="Go Finances" src="./assets/gofinances.png" width="400px" style="border-radius:16px;"/>
 </h1>
 
 <h3 align="center" >

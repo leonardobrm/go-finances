@@ -117,8 +117,8 @@ const Dashboard: React.FC = () => {
 
             {transactions &&
               transactions.map(transaction => (
-                <tbody key={transaction.id}>
-                  <tr>
+                <tbody>
+                  <tr key={transaction.id}>
                     <td className="title">{transaction.title}</td>
                     <td className={transaction.type}>
                       {transaction.type === 'outcome' && ' - '}
